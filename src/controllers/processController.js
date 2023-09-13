@@ -51,7 +51,10 @@ let getBlockChain = async (req, res) => {
     myBlockChain.chain[1].data = { name: 'Ngueybn VAn a' };
     console.log('Is valid when change data of Block 1: ' + myBlockChain.checkIntegrityBlockChain());//false
 
-    return res.send('OK');
+    return res.status(200).json({
+        status: 'Ok',
+        data: myBlockChain
+    });
 }
 
 export {
