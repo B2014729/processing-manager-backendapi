@@ -38,21 +38,17 @@ const getStaffList = async (req, res) => {
 }
 
 
-const createStaff = async (req, res) => {
-    let status = 404;
+const newStaff = async (req, res) => {
     let { id, fullname, birth_date, gender, phone, id_number, address, email,
-        link_avatar, id_salary, username, password, role } = req.body;
+        link_avatar, id_DV, position, id_salary, username, password, role } = req.body;
 
     if (!link_avatar) {
         link_avatar = '';
     }
     await staffModel.createStaff(id, fullname, birth_date, gender, phone,
-        id_number, address, email, link_avatar, id_salary, username, password, role).then((result) => {
-            if (result) {
-                status = 200;
-            }
-            return res.status(status).json({
-                status: status,
+        id_number, address, email, link_avatar, id_DV, position, id_salary, username, password, role).then((result) => {
+            return res.status(200).json({
+                status: 200,
                 message: result,
             });
         });
@@ -62,14 +58,15 @@ const createStaff = async (req, res) => {
 const updateStaffInfor = async (req, res) => {
     let status = 404;
     let id = req.params.id;
-    let { fullname, birth_date, gender, phone, id_number, address, email, id_salary } = req.body;
-    await staffModel.updateStaff(id, fullname, birth_date, gender, phone, id_number, address, email, id_salary).then((result) => {
+    let { fullname, birth_date, gender, phone, id_number, address, email, id_DV, position, id_salary } = req.body;
+
+    await staffModel.updateStaff(id, fullname, birth_date, gender, phone, id_number, address, email, id_DV, position, id_salary).then((result) => {
         if (result) {
             status = 200;
         }
         return res.status(status).json({
             status: status,
-            message: result,
+            message: result, //true or false
         });
     });
 }
@@ -77,13 +74,9 @@ const updateStaffInfor = async (req, res) => {
 
 const deleteStaff = async (req, res) => {
     let id = req.params.id;
-    let status = 404;
     await staffModel.deleteStaff(id).then((result) => {
-        if (result) {
-            status = 200;
-        }
-        return res.status(status).json({
-            status: status,
+        return res.status(200).json({
+            status: 200,
             message: result,
         });
     });
@@ -93,7 +86,7 @@ const deleteStaff = async (req, res) => {
 export {
     getStaffInfor,
     getStaffList,
-    createStaff,
+    newStaff,
     updateStaffInfor,
     deleteStaff
 }

@@ -19,11 +19,11 @@ const findAll = async () => {
 }
 
 
-const createStaff = async (id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_salary, username, password, role) => {
+const createStaff = async (id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_dv, position, id_salary, username, password, role) => {
    try {
+      await connection.execute('INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+         , [id, fullname, birth_date, gender, id_number, address, phone, email, id_dv, position, id_salary, link_avatar]);
       await accountModel.createAccount(id, username, password, role);
-      await connection.execute('INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-         , [id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_salary]);
    } catch (err) {
       console.log(err);
       return false;
@@ -32,11 +32,11 @@ const createStaff = async (id, fullname, birth_date, gender, phone, id_number, a
 }
 
 
-const updateStaff = async (id, name, birth, gender, phone, id_number, address, email, id_salary) => {
+const updateStaff = async (id, name, birth, gender, phone, id_number, address, email, id_dv, position, id_salary) => {
    try {
       await
-         connection.execute('UPDATE staff SET fullname = ?, birth_date = ?, gender = ?, phone = ?, id_number = ?, address = ?, email = ?, id_salary = ? WHERE id = ?',
-            [name, birth, gender, phone, id_number, address, email, id_salary, id]);
+         connection.execute('UPDATE staff SET fullname = ?, birth_date = ?, gender = ?, phone = ?, id_number = ?, address = ?, email = ?, id_DV = ?, position = ?, id_salary = ? WHERE id = ?',
+            [name, birth, gender, phone, id_number, address, email, id_dv, position, id_salary, id]);
    } catch (err) {
       console.log(err);
       return false;

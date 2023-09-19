@@ -10,6 +10,14 @@ const createAccount = async (id, username, password, role) => {
     return true;
 }
 
+const checkIsset = async (username) => {
+    let [result, field] = await connection.execute('SELECT id FROM user WHERE username = ?', [username]);
+    if (result.length > 0) {
+        return true;
+    }
+    return false;
+}
+
 
 const deleteAccount = async (id) => {
     try {
@@ -21,8 +29,17 @@ const deleteAccount = async (id) => {
     return true;
 }
 
+const checkAccount = async (username, password) => {
+    let [result, field] = await connection.execute('SELECT * FROM user WHERE username = ? AND password = ?', [username, password]);
+    if (result) {
+        return result;
+    }
+    return [];
+}
 
 export {
     createAccount,
-    deleteAccount
+    deleteAccount,
+    checkAccount,
+    checkIsset
 }
