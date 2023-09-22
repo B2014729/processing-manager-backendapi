@@ -7,6 +7,7 @@ import * as acountController from '../controllers/accountController.js';
 
 let router = express.Router();
 
+//update router
 const initWebRoute = (app) => {
     //Acount
     router.route('/login')
