@@ -30,9 +30,6 @@ const initWebRoute = (app) => {
     router.route('/staff-list')
         .get(staffController.getStaffList)
 
-    // router.route('/edit-user')
-    //     .post(staffController.updateStaffInfor)
-
     //Processing
     router.route('/myblockchain')
         .get(getBlockChain)
