@@ -1,62 +1,67 @@
-import { BlockChain, Block } from "../models/block.js"
+import * as processModel from '../models/processModel.js'
 
-let getBlockChain = async (req, res) => {
-    let myBlockChain = new BlockChain('firstBlockChain');
+let getAllProcess = async (req, res) => {
+    try {
+        await processModel.getAllProcess().then((result) => {
+            return res.status(200).json({
+                data: result
+            });
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(404).json({
+            data: null
+        });
+    }
+}
 
-    let blockOne = new Block('09/11/2023', {
-        name: 'Duong Hai Bang',
-        old: 21,
-        address: 'Xuan Khanh, Ninh Kieu, Can Tho'
-    });
+let getProcess = async (req, res) => {
+    let nameProcess = req.params.name;
+    await processModel.getProcess(nameProcess).then((result) => {
+        return res.status(200).json({
+            data: result
+        });
+    })
+}
 
-    let blockSecond = new Block('09/12/2023', {
-        name: 'Trinh Thang Binh',
-        old: 24,
-        address: '30/4, Ninh Kieu, Can Tho'
-    });
+let newProcess = async (req, res) => {
+    let name = req.body.name;
+    try {
+        await processModel.createProcess(name).then((result) => {
+            return res.status(200).json({
+                message: result,
+            });
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(404).json({
+            message: false,
+        });
+    }
+}
 
-    let blockFinal = new Block('07/09/2023', {
-        name: 'Trinh Dinh Ben',
-        old: 34,
-        address: 'An Hoa, Ninh Kieu, Can Tho'
-    });
-
-    let listBlock = [
-        new Block('09/11/2023', {
-            name: 'Duong Hai Bang',
-            old: 21,
-            address: 'Xuan Khanh, Ninh Kieu, Can Tho'
-        }),
-
-        new Block('09/12/2023', {
-            name: 'Trinh Thang Binh',
-            old: 24,
-            address: '30/4, Ninh Kieu, Can Tho'
-        }),
-
-        new Block('07/09/2023', {
-            name: 'Trinh Dinh Ben',
-            old: 34,
-            address: 'An Hoa, Ninh Kieu, Can Tho'
-        }),
-    ];
-
-    listBlock.forEach(block => {
-        myBlockChain.addBlock(block);
-    });
-
-    myBlockChain.printBlockChain();
-    console.log('Is valid: ' + myBlockChain.checkIntegrityBlockChain());//true
-
-    myBlockChain.chain[1].data = { name: 'Ngueybn VAn a' };
-    console.log('Is valid when change data of Block 1: ' + myBlockChain.checkIntegrityBlockChain());//false
-
-    return res.status(200).json({
-        status: 'Ok',
-        data: myBlockChain
-    });
+let addActive = async (req, res) => {
+    let name = req.body.name;
+    let { dateUpdate, user, contents } = req.body;
+    try {
+        await processModel.addActiveOnProcess(name, dateUpdate, user, contents).then((result) => {
+            if (result) {
+                return res.status(200).json({
+                    message: result,
+                });
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(404).json({
+            message: false,
+        });
+    }
 }
 
 export {
-    getBlockChain
+    getProcess,
+    newProcess,
+    getAllProcess,
+    addActive
 }

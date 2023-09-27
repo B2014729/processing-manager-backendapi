@@ -4,9 +4,8 @@ let users = [];
 
 const checkIssetInDatabase = async (req, res) => {
     let { username } = req.body;
-    console.log(username)
+
     await accountModel.checkIsset(username).then((result) => {
-        console.log(result)
         if (result) {
             return res.status(200).json({
                 status: 200,
