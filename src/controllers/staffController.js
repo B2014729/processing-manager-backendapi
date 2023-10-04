@@ -82,11 +82,33 @@ const deleteStaff = async (req, res) => {
     });
 }
 
+const getStaffWithPosition = async (req, res) => {
+    //let position = req.params.position;
+    await staffModel.getStaffWithPosition().then((result) => {
+        return res.status(200).json({
+            status: 200,
+            message: 'OK',
+            data: result
+        });
+    });
+}
+
+const getSalaryStaff = async (req, res) => {
+    await staffModel.getSalaryStaff().then((result) => {
+        return res.status(200).json({
+            status: 200,
+            message: 'OK',
+            data: result
+        });
+    });
+}
 
 export {
     getStaffInfor,
     getStaffList,
     newStaff,
     updateStaffInfor,
-    deleteStaff
+    deleteStaff,
+    getStaffWithPosition,
+    getSalaryStaff
 }

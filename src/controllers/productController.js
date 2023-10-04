@@ -21,8 +21,25 @@ const getListProduct = async (req, res) => {
     });
 }
 
+const updateProduct = async (req, res) => {
+    let { id, name, hsd, preserve, pack, status, image } = req.body;
+    if (req.hasOwnProperty('file')) {
+        if (req.file.hasOwnProperty('filename')) {
+            image = 'http://localhost:3000/images/' + req.file.filename;
+        }
+    }
+
+    await productModel.updateProduct(id, name, hsd, preserve, pack, status, image).then((result) => {
+        return res.status(200).json({
+            status: 200,
+            message: 'OK',
+            data: result,
+        });
+    });
+}
 
 export {
     getProduct,
     getListProduct,
+    updateProduct
 }

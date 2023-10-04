@@ -1,8 +1,9 @@
+import e from 'cors';
 import connection from '../configs/databaseConfig.js';
 import * as accountModel from '../models/accountModel.js';
 
 const findOne = async (id) => {
-   let [staffInfo, field] = await connection.execute('SELECT * FROM staff WHERE id = ?', [id]);
+   let [staffInfo, field] = await connection.execute('SELECT staff.*, salary.basic, salary.support, salary.BH FROM staff, salary WHERE staff.id_salary = salary.id AND staff.id = ?', [id]);
    if (staffInfo) {
       return staffInfo[0];
    }
@@ -57,11 +58,36 @@ const deleteStaff = async (id) => {
    return true;
 }
 
+
+const getStaffWithPosition = async () => {
+   try {
+      let [result, field] = await connection.execute('SELECT * FROM staff WHERE position = ?', ['Quản lí lô hàng']);
+      if (result.length > 0) {
+         return result;
+      }
+   } catch (err) {
+      console.log(err);
+      return [];
+   }
+}
+
+const getSalaryStaff = async () => {
+   try {
+      let [result, field] = await connection.execute('SELECT staff.id, staff.fullname, staff.position, staff.id_salary, salary.basic, salary.support, salary.BH FROM staff, salary WHERE staff.id_salary = salary.id', []);
+      return result;
+   } catch (error) {
+      console.log(error);
+   }
+   return [];
+}
+
 export {
    findOne,
    findAll,
    createStaff,
    updateStaff,
-   deleteStaff
+   deleteStaff,
+   getStaffWithPosition,
+   getSalaryStaff
 }
 

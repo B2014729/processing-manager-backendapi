@@ -2,7 +2,6 @@ import express from "express";
 import middelewareConfig from "./configs/middelwareConfig.js";
 import initWebRoute from "./routes/index.js";
 
-
 const app = express();
 const PORT = 3000;
 

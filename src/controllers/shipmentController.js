@@ -23,10 +23,17 @@ const getListShipment = async (req, res) => {
 const getShipment = async (req, res) => {
     let id = req.params.id;
     await shipmentModel.getShipment(id).then((result) => {
-        return res.status(200).json({
-            status: 200,
-            message: 'OK',
-            data: result
+        if (result) {
+            return res.status(200).json({
+                status: 200,
+                message: 'OK',
+                data: result
+            });
+        }
+        return res.status(404).json({
+            status: 404,
+            message: 'Not Found',
+            data: null
         });
     });
 }

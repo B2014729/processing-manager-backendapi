@@ -1,3 +1,4 @@
+import { run } from "@babel/core/lib/transformation/index.js";
 import connection from "../configs/databaseConfig.js";
 
 const getProduct = async (id) => {
@@ -22,7 +23,18 @@ const getAllProduct = async () => {
     }
 }
 
+const updateProduct = async (id, name, hsd, preserve, pack, status, image) => {
+    try {
+        await connection.execute('UPDATE product SET name = ?, hsd = ?, preserve = ?, pack = ?, status = ?, image = ? WHERE id = ?', [name, hsd, preserve, pack, status, image, id]);
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 export {
     getProduct,
-    getAllProduct
+    getAllProduct,
+    updateProduct,
 }
