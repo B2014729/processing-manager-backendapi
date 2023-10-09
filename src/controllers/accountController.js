@@ -1,6 +1,19 @@
 import * as accountModel from '../models/accountModel.js';
+import jwt from 'jsonwebtoken';
 
-let users = [];
+const encodeToken = (idUser) => {
+    return jwt.sign({
+        is: 'Hai Bang',
+        userID: idUser,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate() + 3)
+    }, "privateKeyToken");
+}
+
+const decodeToken = (token) => {
+    let decode = jwt.verify(token, 'privateKeyToken')
+    return decode.userID;
+}
 
 const checkIssetInDatabase = async (req, res) => {
     let { username } = req.body;
@@ -8,47 +21,32 @@ const checkIssetInDatabase = async (req, res) => {
     await accountModel.checkIsset(username).then((result) => {
         if (result) {
             return res.status(200).json({
-                status: 200,
+                statusCode: 200,
                 message: true,
             });
         }
         return res.status(200).json({
-            status: 200,
+            statusCode: 200,
             message: false,
         });
     });
-}
-
-//session
-let checkIssetUser = (id) => {
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].id === id) {
-            return true;
-        }
-    }
-    return false;
 }
 
 let checkUser = async (req, res) => {
     let { username, password } = req.body;
     await accountModel.checkAccount(username, password).then((result) => {
         if (result.length > 0) {
-            if (!checkIssetUser(result[0].id)) {
-                users.push({
-                    id: result[0].id,
-                    role: result[0].role
-                });
-            }
+            const token = encodeToken(result[0].id);
+            res.setHeader("Authorization", token);
 
             return res.status(200).json({
-                status: 200,
+                statusCode: 200,
                 message: true,
                 data: result,
-                user: users
             });
         }
         return res.status(404).json({
-            status: 404,
+            statusCode: 404,
             message: false,
             data: []
         });
@@ -56,37 +54,21 @@ let checkUser = async (req, res) => {
     });
 }
 
-const getSession = (req, res) => {
-    if (req.session) {
+const checkRole = async (req, res) => {
+    let id = await decodeToken(req.body.token);
+
+    await accountModel.checkRole(id).then((result) => {
         return res.status(200).json({
-            status: 200,
+            statusCode: 200,
             message: 'OK',
-            data: users
+            data: result.role
         });
-    }
-    return res.status(404).json({
-        status: 404,
-        message: 'Not found',
-        data: null
     });
 }
 
-const removeSession = (req, res) => {
-    let id = req.body.id;
-    users.forEach(item => {
-        if (item.id == id) {
-            users.pop();
-        }
-    });
-    return res.status(200).json({
-        status: 200,
-        message: 'OK',
-    });
-}
 
 export {
     checkUser,
-    getSession,
-    removeSession,
-    checkIssetInDatabase
+    checkIssetInDatabase,
+    checkRole
 }

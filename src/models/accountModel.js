@@ -37,9 +37,15 @@ const checkAccount = async (username, password) => {
     return [];
 }
 
+const checkRole = async (id) => {
+    let [result, field] = await connection.execute('SELECT role FROM user WHERE id = ?', [id]);
+    return result[0];
+}
+
 export {
     createAccount,
     deleteAccount,
     checkAccount,
-    checkIsset
+    checkIsset,
+    checkRole,
 }

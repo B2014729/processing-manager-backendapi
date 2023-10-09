@@ -23,6 +23,16 @@ const getAllProduct = async () => {
     }
 }
 
+const createProduct = async (name, hsd, preserve, pack, status, image) => {
+    try {
+        await connection.execute('INSERT INTO product(name, hsd, preserve, pack, status, image) VALUES (?,?,?,?,?,?)', [name, hsd, preserve, pack, status, image]);
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 const updateProduct = async (id, name, hsd, preserve, pack, status, image) => {
     try {
         await connection.execute('UPDATE product SET name = ?, hsd = ?, preserve = ?, pack = ?, status = ?, image = ? WHERE id = ?', [name, hsd, preserve, pack, status, image, id]);
@@ -33,8 +43,20 @@ const updateProduct = async (id, name, hsd, preserve, pack, status, image) => {
     return true;
 }
 
+const deleteProduct = async (id) => {
+    try {
+        await connection.execute('DELETE FROM product WHERE id = ?', [id]);
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+    return true;
+}
+
 export {
     getProduct,
     getAllProduct,
+    createProduct,
     updateProduct,
+    deleteProduct,
 }

@@ -1,30 +1,29 @@
 import express from "express";
 import middelewareConfig from "./configs/middelwareConfig.js";
 import initWebRoute from "./routes/index.js";
+import MongoDB from "./configs/mongoDB.js";
 
-const app = express();
-const PORT = 3000;
+const startServer = async () => {
+    try {
+        const app = express();
+        const PORT = 3000;
 
-middelewareConfig(app);
-initWebRoute(app);
+        middelewareConfig(app);
+        initWebRoute(app);
 
-app.use('/get-session', (req, res, next) => {
-    res.send(req.session)
-});
+        await MongoDB.connect("mongodb://127.0.0.1:27017/process-manager");
 
-app.use('/set-session', (req, res, next) => {
-    req.session.userlogin = {
-        id: 23650,
-        role: 1
+        app.use((req, res, next) => {
+            res.send('404 Not Found')
+        })
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        })
+    } catch (error) {
+        console.log(error);
     }
-    res.send('Ok')
-});
+}
 
-app.use((req, res, next) => {
-    res.send('404 Not Found')
-})
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-})
+startServer();
 

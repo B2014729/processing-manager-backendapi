@@ -30,15 +30,16 @@ const initWebRoute = (app) => {
     //Acount ----------------------
     router.route('/login')
         .post(acountController.checkUser);
-    router.route('/get-session')
-        .get(acountController.getSession);
-    router.route('/logout')
-        .post(acountController.removeSession);
     router.route('/account/check-isset')
         .post(acountController.checkIssetInDatabase);
-
+    router.route('/account/check-role')
+        .post(acountController.checkRole)
 
     //Staff ----------------------
+    router.route('/profile')
+        .post(staffController.getProfile);
+    router.route('/update-profile')
+        .post(staffController.updateProfile);
     router.route('/new-staff')
         .post(staffController.newStaff);
     router.route('/staff/:id')
@@ -51,17 +52,6 @@ const initWebRoute = (app) => {
         .get(staffController.getStaffWithPosition);
     router.route('/get-salary-table')
         .get(staffController.getSalaryStaff);
-
-
-    //Processing ----------------------
-    router.route('/list-process')
-        .get(processController.getAllProcess);
-    router.route('/get-process/:name')
-        .get(processController.getProcess);
-    router.route('/new-process')
-        .post(processController.newProcess);
-    router.route('/add-active')
-        .post(processController.addActive);
 
     //Shipment ----------------------
     router.route('/list-shipments')
@@ -77,13 +67,27 @@ const initWebRoute = (app) => {
     //Product ----------------------
     router.route('/product/:id')
         .get(productController.getProduct)
+        .delete(productController.deleteProduct);
     router.route('/list-product')
         .get(productController.getListProduct);
+    router.route('/new-product')
+        .post(uploadFile.single('image'), productController.newProduct);
+
 
     //Upload file image and infor product
     router.route('/uploadFile')
         .post(uploadFile.single('image'), productController.updateProduct);
 
+
+    //Processing ----------------------
+    router.route('/get-process/:id')
+        .get(processController.getProcess);
+    router.route('/new-process')
+        .post(processController.newProcess);
+    // router.route('/add-active')
+    //     .post(processController.addActive);
+    router.route('/check-isvalid/:id')
+        .get(processController.checkIsvalid);
     return app.use('/api/processing-management', router);
 }
 

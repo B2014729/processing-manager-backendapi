@@ -1,67 +1,58 @@
-import * as processModel from '../models/processModel.js'
-
-let getAllProcess = async (req, res) => {
-    try {
-        await processModel.getAllProcess().then((result) => {
-            return res.status(200).json({
-                data: result
-            });
-        });
-    } catch (err) {
-        console.log(err);
-        return res.status(404).json({
-            data: null
-        });
-    }
-}
+import ProcessModel from '../models/processModel.js';
+import MongoDB from '../configs/mongoDB.js';
 
 let getProcess = async (req, res) => {
-    let nameProcess = req.params.name;
-    await processModel.getProcess(nameProcess).then((result) => {
+    let id = req.params.id;
+    try {
+        const processModel = new ProcessModel(MongoDB.client);
+        const document = await processModel.getProcess(id);
         return res.status(200).json({
-            data: result
+            statusCode: 200,
+            message: 'OK',
+            data: document
         });
-    })
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 let newProcess = async (req, res) => {
-    let name = req.body.name;
+    let { id, timetamps, title, contents, idUser } = req.body;
+    let data = {
+        "dateUpdate": timetamps,
+        "title": title,
+        "contents": contents,
+        "user": Number(idUser)
+    }
     try {
-        await processModel.createProcess(name).then((result) => {
-            return res.status(200).json({
-                message: result,
-            });
+        let processModel = new ProcessModel(MongoDB.client);
+        await processModel.addBlock(id, timetamps, data);
+        return res.status(200).json({
+            statusCode: 200,
+            message: 'OK',
         });
-    } catch (err) {
-        console.log(err);
-        return res.status(404).json({
-            message: false,
-        });
+    } catch (error) {
+        console.log(error);
     }
 }
 
-let addActive = async (req, res) => {
-    let name = req.body.name;
-    let { dateUpdate, user, contents } = req.body;
+
+const checkIsvalid = async (req, res) => {
+    let id = req.params.id;
     try {
-        await processModel.addActiveOnProcess(name, dateUpdate, user, contents).then((result) => {
-            if (result) {
-                return res.status(200).json({
-                    message: result,
-                });
-            }
+        let processModel = new ProcessModel(MongoDB.client);
+        let result = await processModel.checkProcessTrue(id);
+        return res.status(200).json({
+            statusCode: 200,
+            message: 'OK',
+            data: result
         });
-    } catch (err) {
-        console.log(err);
-        return res.status(404).json({
-            message: false,
-        });
+    } catch (error) {
+        console.log(error);
     }
 }
-
 export {
     getProcess,
     newProcess,
-    getAllProcess,
-    addActive
+    checkIsvalid
 }

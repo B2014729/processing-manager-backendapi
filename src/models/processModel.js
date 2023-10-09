@@ -1,88 +1,54 @@
 import { BlockChain, Block } from "./blockChain.js";
 
-let processBlockChain = [
-    {
-        name: 'default',
-        data: new BlockChain('default'),
+let processBlockChain = new BlockChain('process-blockchain');
+
+class ProcessModel {
+    constructor(client) {
+        this.Process = client.db().collection("process");
     }
-]
 
-let listBlock = [
-    new Block('09/11/2023', {
-        dateUpdate: '09/11/2023',
-        title: 'Tiếp nhận nguyên liệu',
-        contents: 'Nguyên liệu được nhập từ kho cung cấp tại Đà Nẵng, được kiểm duyệt nghiêm ngặt.',
-    }),
+    async find(filter) {
+        return await this.Process.find(filter).toArray();
+    }
 
-    new Block('09/12/2023', {
-        dateUpdate: '09/12/2023',
-        title: 'Chế biến (Cắt tỉa)',
-        contents: 'Nguyên liệu được rửa sạch, và chuyển sang giai đoạn cắt tỉa gọn ràng',
-    }),
+    async getProcess(id) {
+        processBlockChain.resetChain();
+        let process = await this.find({
+            id: Number(id)
+        })
+        process.forEach(element => {
+            let newBlock = new Block(Number(id), element.timetamps, element.data);
+            processBlockChain.addBlock(newBlock);
+        });
+        return processBlockChain;
+    }
 
-    new Block('09/14/2023', {
-        dateUpdate: '09/14/2023',
-        title: 'Chế biến (Thái mỏng)',
-        contents: 'Nguyên liệu được thái mỏng pille từng miếng.',
-    }),
+    async addBlock(id, timetamps, data) {
+        await this.getProcess(Number(id));
 
-    new Block('09/15/2023', {
-        dateUpdate: '09/15/2023',
-        title: 'Đóng gói',
-        contents: 'Sản phẩm được đóng gói và kiểm định trực tiếp tại xưởng chế biến.',
-    }),
+        let newBlock = new Block(Number(id), timetamps, data);
+        processBlockChain.addBlock(newBlock);
 
-    new Block('09/18/2023', {
-        dateUpdate: '09/18/2023',
-        title: 'Vận chuyển',
-        contents: 'Sản phẩm phân thành từng lô hàng để tiến hành giao cho đơn vị vận chuyển tới các nhà cung cấp, siêu thị bán lẻ.',
-    }),
-];
-
-listBlock.forEach(block => {
-    processBlockChain[0].data.addBlock(block);
-});
-
-let getAllProcess = async () => {
-    return processBlockChain;
-}
-
-let getProcess = async (name) => {
-    for (let i = 0; i < processBlockChain.length; i++) {
-        if (processBlockChain[i].name == name) {
-            return processBlockChain[i].data.getDataBlockChain();
+        if (processBlockChain.checkIntegrityBlockChain()) {
+            await this.Process.insertOne(processBlockChain.getLatesBlock());
         }
     }
-    return [];
-}
 
-let createProcess = async (name) => {
-    const processNew = {
-        name: name,
-        data: new BlockChain(name)
-    };
-    processBlockChain.push(processNew);
-    return true;
-}
+    async checkProcessTrue(id) {
+        await this.getProcess(Number(id));
 
-let addActiveOnProcess = async (name, dateUpdate, user, contents) => {
-    let newBlock = new Block(dateUpdate, {
-        dateUpdate: dateUpdate,
-        user: user,
-        contents: contents
-    }, '');
-
-    for (let i = 0; i < processBlockChain.length; i++) {
-        if (processBlockChain[i].name === name) {
-            return processBlockChain[i].data.addBlock(newBlock);
+        let process = await this.find({
+            id: Number(id)
+        });
+        let isValid = [];
+        for (let i = 0; i < process.length; i++) {
+            if (processBlockChain.getIndexBlock(i + 1).hash !== process[i].hash) {
+                isValid.push(i)
+            }
         }
+        return isValid;
     }
-    return false;
 }
 
-export {
-    getProcess,
-    createProcess,
-    addActiveOnProcess,
-    getAllProcess
-}
+export default ProcessModel;
+

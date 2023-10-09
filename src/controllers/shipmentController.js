@@ -4,7 +4,7 @@ const checkIsset = async (req, res) => {
     let id = req.body.id;
     await shipmentModel.checkIsset(id).then((result) => {
         return res.status(200).json({
-            status: 200,
+            statusCode: 200,
             message: result
         });
     });
@@ -13,7 +13,7 @@ const checkIsset = async (req, res) => {
 const getListShipment = async (req, res) => {
     await shipmentModel.getListShipment().then((result) => {
         return res.status(200).json({
-            status: 200,
+            statusCode: 200,
             message: 'OK',
             data: result
         });
@@ -25,13 +25,13 @@ const getShipment = async (req, res) => {
     await shipmentModel.getShipment(id).then((result) => {
         if (result) {
             return res.status(200).json({
-                status: 200,
+                statusCode: 200,
                 message: 'OK',
                 data: result
             });
         }
         return res.status(404).json({
-            status: 404,
+            statusCode: 404,
             message: 'Not Found',
             data: null
         });
@@ -42,7 +42,7 @@ const newShipment = async (req, res) => {
     await shipmentModel.createShipment(id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price)
         .then((result) => {
             return res.status(200).json({
-                status: 200,
+                statusCode: 200,
                 message: result,
             });
         });
@@ -54,7 +54,7 @@ const updateShipment = async (req, res) => {
     await shipmentModel.updateShipment(id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price)
         .then((result) => {
             return res.status(200).json({
-                status: 200,
+                statusCode: 200,
                 message: 'OK',
                 data: result
             });

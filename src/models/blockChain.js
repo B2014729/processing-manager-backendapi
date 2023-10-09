@@ -1,7 +1,8 @@
 import crypto from 'crypto-js';
 
 class Block {
-    constructor(timetamps, data, previousHash = '') {
+    constructor(id, timetamps, data, previousHash = '') {
+        this.id = id;
         this.timetamps = timetamps;
         this.data = data;
         this.previousHash = previousHash;
@@ -10,15 +11,8 @@ class Block {
     }
 
     hashBlock() {
-        return crypto.SHA256(this.timetamps + JSON.stringify(this.data) + this.previousHash + this.nonce).toString();
-    }
-
-    printBlock() {
-        console.log('Time: ' + this.timetamps);
-        console.log(this.data);
-        console.log('Previous hash: ' + this.previousHash);
-        console.log('Hash: ' + this.hash);
-        console.log('Nonce: ' + this.nonce);
+        return crypto.SHA256(this.id + this.timetamps + JSON.stringify(this.data)
+            + this.previousHash + this.nonce).toString();
     }
 
     getDataBlock() {
@@ -32,8 +26,12 @@ class BlockChain {
         this.chain = [this.createGenesisBlock()];
     }
 
+    resetChain() {
+        this.chain = [this.createGenesisBlock()];
+    }
+
     createGenesisBlock() {
-        return new Block('01/01/2023', 'Data of the first block in the blockchain');
+        return new Block(0, '01/01/2023', 'Data of the first block in the blockchain');
     }
 
     getFirstBlock() {
@@ -42,6 +40,10 @@ class BlockChain {
 
     getLatesBlock() {
         return this.chain[this.chain.length - 1];
+    }
+
+    getIndexBlock(index) {
+        return index < this.chain.length ? this.chain[index] : null;
     }
 
     getDataBlockChain() {
