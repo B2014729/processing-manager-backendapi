@@ -32,6 +32,35 @@ const getShipment = async (id) => {
     }
 }
 
+const getShipmentByFilter = async (month, year, id_product) => {
+    try {
+        if (Number(id_product) !== 0) {
+            let [result, field] = await connection.execute('SELECT * FROM shipment LEFT JOIN detail_shipment ON shipment.id = detail_shipment.id WHERE MONTH(detail_shipment.date_manufacture) = ? AND YEAR(detail_shipment.date_manufacture) = ? AND shipment.id_product = ?',
+                [month, year, id_product]);
+            if (result) {
+                return result;
+            }
+        } else {
+            if (Number(year) !== 0) {
+                let [result, field] = await connection.execute('SELECT * FROM shipment, detail_shipment WHERE shipment.id = detail_shipment.id AND MONTH(detail_shipment.date_manufacture) = ? AND YEAR(detail_shipment.date_manufacture) = ?',
+                    [month, year]);
+                if (result) {
+                    return result;
+                }
+            } else {
+                let [result, field] = await connection.execute('SELECT * FROM shipment, detail_shipment WHERE shipment.id = detail_shipment.id AND MONTH(detail_shipment.date_manufacture) = ?',
+                    [month]);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}
+
 const createShipment = async (id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price) => {
     try {
         await connection.execute('INSERT INTO shipment VALUES (?,?,?,?)', [id, name, id_product, id_staff_Mn]);
@@ -60,5 +89,6 @@ export {
     createShipment,
     updateShipment,
     getShipment,
-    checkIsset
+    checkIsset,
+    getShipmentByFilter
 }

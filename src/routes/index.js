@@ -59,6 +59,8 @@ const initWebRoute = (app) => {
     router.route('/get-shipment/:id')
         .get(shipmentController.getShipment)
         .put(shipmentController.updateShipment);
+    router.route('/get-shipment-filter')
+        .post(shipmentController.getShipmentByFilter);
     router.route('/shipment/check-isset')
         .post(shipmentController.checkIsset);
     router.route('/new-shipment')

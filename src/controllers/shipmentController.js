@@ -37,6 +37,18 @@ const getShipment = async (req, res) => {
         });
     });
 }
+
+const getShipmentByFilter = async (req, res) => {
+    let { month, year, id_product } = req.body;
+    await shipmentModel.getShipmentByFilter(month, year, id_product).then((result) => {
+        return res.status(200).json({
+            statusCode: 200,
+            message: 'OK',
+            data: result,
+        });
+    });
+}
+
 const newShipment = async (req, res) => {
     let { id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price } = req.body;
     await shipmentModel.createShipment(id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price)
@@ -67,4 +79,5 @@ export {
     updateShipment,
     newShipment,
     checkIsset,
+    getShipmentByFilter
 }

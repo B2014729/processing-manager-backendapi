@@ -30,9 +30,13 @@ const deleteAccount = async (id) => {
 }
 
 const checkAccount = async (username, password) => {
-    let [result, field] = await connection.execute('SELECT * FROM user WHERE username = ? AND password = ?', [username, password]);
-    if (result) {
-        return result;
+    try {
+        let [result, field] = await connection.execute('SELECT * FROM user WHERE username = ? AND password = ?', [username, password]);
+        if (result) {
+            return result;
+        }
+    } catch (err) {
+        console.log(err);
     }
     return [];
 }
