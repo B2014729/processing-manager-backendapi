@@ -82,6 +82,8 @@ const getStaffList = async (req, res) => {
 const newStaff = async (req, res) => {
     let { id, fullname, birth_date, gender, phone, id_number, address, email,
         link_avatar, id_DV, position, id_salary, username, password, role } = req.body;
+    console.log(id, fullname, birth_date, gender, phone, id_number, address, email,
+        link_avatar, id_DV, position, id_salary, username, password, role);
 
     if (!link_avatar) {
         link_avatar = '';

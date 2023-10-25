@@ -1,4 +1,5 @@
 import * as shipmentModel from '../models/shipmentModel.js';
+// import xlsx from 'xlsx';
 
 const checkIsset = async (req, res) => {
     let id = req.body.id;
@@ -73,11 +74,39 @@ const updateShipment = async (req, res) => {
         })
 }
 
+
+// const exportFileExcel = async (req, res) => {
+//     let data = await shipmentModel.getListShipment();
+//     let newData = [];
+//     data.forEach(element => {
+//         let newItem = {
+//             'id': element.id,
+//             'name': element.name,
+//             'date_manufacture': element.date_manufacture,
+//             'quantity': element.quantity,
+//             'price': element.price,
+//             'sum': (element.price * element.quantity)
+//         }
+//         newData.push(newItem);
+//     });
+//     let header = [['ID', 'Tên lô hàng', 'Ngày sản xuất', 'Số lượng', 'Giá bán', 'Tổng']];
+//     let workbook = xlsx.utils.book_new();
+//     let worksheet = xlsx.utils.json_to_sheet(newData);
+//     xlsx.utils.sheet_add_aoa(worksheet, header)
+//     xlsx.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+//     let buffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+
+//     res.attachment('data.xlsx');
+//     return res.send(buffer);
+// }
+
+
 export {
     getListShipment,
     getShipment,
     updateShipment,
     newShipment,
     checkIsset,
-    getShipmentByFilter
+    getShipmentByFilter,
+    //   exportFileExcel
 }

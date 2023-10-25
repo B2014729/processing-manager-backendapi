@@ -64,7 +64,7 @@ const getShipmentByFilter = async (month, year, id_product) => {
 const createShipment = async (id, name, id_product, id_staff_Mn, date_manufacture, status, quantity, price) => {
     try {
         await connection.execute('INSERT INTO shipment VALUES (?,?,?,?)', [id, name, id_product, id_staff_Mn]);
-        await connection.execute('INSERT INTO detail_shipment VALUES (?,?,?,?,?)', [id, quantity, price, date_manufacture, status]);
+        await connection.execute('INSERT INTO detail_shipment VALUES (?,?,?,?,?)', [id, date_manufacture, quantity, price, status]);
     } catch (error) {
         console.log(error);
         return false;

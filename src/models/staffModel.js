@@ -21,9 +21,11 @@ const findAll = async () => {
 
 
 const createStaff = async (id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_dv, position, id_salary, username, password, role) => {
+   console.log(id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_dv, position, id_salary, username, password, role);
+
    try {
       await connection.execute('INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-         , [id, fullname, birth_date, gender, phone, id_number, address, email, link_avatar, id_dv, position, id_salary]);
+         , [id, fullname, birth_date, gender, phone, id_number, address, email, id_dv, position, id_salary, link_avatar]);
       await accountModel.createAccount(id, username, password, role);
    } catch (err) {
       console.log(err);
