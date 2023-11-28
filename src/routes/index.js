@@ -61,7 +61,8 @@ const initWebRoute = (app) => {
         .get(shipmentController.getListShipment);
     router.route('/get-shipment/:id')
         .get(shipmentController.getShipment)
-        .put(shipmentController.updateShipment);
+        .put(shipmentController.updateShipment)
+        .delete(shipmentController.deleteShipment);
     router.route('/get-shipment-filter')
         .post(shipmentController.getShipmentByFilter);
     router.route('/shipment/check-isset')
@@ -95,6 +96,7 @@ const initWebRoute = (app) => {
     //     .post(processController.addActive);
     router.route('/check-isvalid/:id')
         .get(processController.checkIsvalid);
+
     return app.use('/api/processing-management', router);
 }
 

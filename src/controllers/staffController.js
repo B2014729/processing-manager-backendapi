@@ -7,22 +7,27 @@ const decodeToken = async (token) => {
 }
 
 const getProfile = async (req, res) => {
-    let id = await decodeToken(req.body.token);
-    // let result = await staffModel.findOne(id); no promise
-    await staffModel.findOne(id).then((result) => {
-        if (result) {
-            return res.status(200).json({
-                statusCode: 200,
-                message: 'OK',
-                data: result
+    try {
+        let id = await decodeToken(req.body.token);
+        // let result = await staffModel.findOne(id); no promise
+        await staffModel.findOne(id).then((result) => {
+            if (result) {
+                return res.status(200).json({
+                    statusCode: 200,
+                    message: 'OK',
+                    data: result
+                });
+            }
+            return res.status(404).json({
+                statusCode: 404,
+                message: 'Not Found',
+                data: null
             });
-        }
-        return res.status(404).json({
-            statusCode: 404,
-            message: 'Not Found',
-            data: null
-        });
-    })
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 const updateProfile = async (req, res) => {

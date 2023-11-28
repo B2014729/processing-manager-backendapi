@@ -84,10 +84,22 @@ const updateShipment = async (id, name, id_product, id_staff_Mn, date_manufactur
     return true;
 }
 
+const deleteShipment = async (id) => {
+    try {
+        await connection.execute('DELETE FROM detail_shipment WHERE id=?', [id]);
+        await connection.execute('DELETE FROM shipment WHERE id = ?', [id]);
+        return true;
+    } catch (error) {
+        console.log(error);
+    }
+    return false;
+}
+
 export {
     getListShipment,
     createShipment,
     updateShipment,
+    deleteShipment,
     getShipment,
     checkIsset,
     getShipmentByFilter

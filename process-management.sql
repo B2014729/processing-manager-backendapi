@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2023 at 08:08 AM
+-- Generation Time: Nov 21, 2023 at 06:09 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -40,8 +40,12 @@ CREATE TABLE `detail_shipment` (
 --
 
 INSERT INTO `detail_shipment` (`id`, `date_manufacture`, `quantity`, `price`, `status`) VALUES
-(12345, '0000-00-00', 36700, 2023, 'Đã thanh toán'),
-(12346, '2023-10-25', 1200, 56000, 'Đã thanh toán');
+(12344, '2023-11-21', 1200, 45500, 'Đang xử lí'),
+(12347, '2023-11-02', 3560, 158000, 'Đã thanh toán'),
+(12355, '2023-11-10', 1230, 45600, 'Đang xử lí'),
+(14566, '2023-11-04', 3330, 67000, 'Đang xử lí'),
+(24354, '2023-11-11', 1400, 45000, 'Đang xử lí'),
+(24357, '2023-11-11', 3400, 130000, 'Đang xử lí');
 
 -- --------------------------------------------------------
 
@@ -108,8 +112,12 @@ CREATE TABLE `shipment` (
 --
 
 INSERT INTO `shipment` (`id`, `name`, `id_product`, `id_staff_Mn`) VALUES
-(12345, 'Cá tra fillet', 4, 12345),
-(12346, 'Cá tra phi lê', 4, 36363);
+(12344, 'Cá tra phi lê', 4, 12345),
+(12347, 'Tôm lột nõn 03', 1, 12345),
+(12355, 'Cá tra phi lê 07', 4, 12345),
+(14566, 'Cá tra cắt khúc đông lạnh', 3, 12345),
+(24354, 'Cá tra cắt khúc', 3, 12345),
+(24357, 'Mực tươi', 2, 34533);
 
 -- --------------------------------------------------------
 
@@ -138,8 +146,9 @@ CREATE TABLE `staff` (
 
 INSERT INTO `staff` (`id`, `fullname`, `birth_date`, `gender`, `phone`, `id_number`, `address`, `email`, `id_DV`, `position`, `id_salary`, `avatar`) VALUES
 (12345, 'Cao Minh Quan', '2001-10-07', 'Nam', '0989839334', '9948988348772', 'Giồng Giềng, Kiên Giang', 'bangduong87220@gmail.com', 'QLLH2', 'Quản lí lô hàng', 2.12, ''),
+(24355, 'Trần Anh Quan', '1998-11-02', 'Nam', '0989833344', '1467838926399', '11A, đường 30/4, Xuân Khánh, Ninh Kiều, Cần Thơ', 'quan333@gmail.com', 'QLLH2', 'Quản lí lô hàng', 2.12, ''),
 (32365, 'Dương Hãi Băng', '2023-10-25', 'Nam', '0988989898', '7003277202832', '124/11A, Xuân Khánh, Ninh Kiều, Cần Thơ.', 'bangduong870@gmail.com', 'QLQT1', 'Quản lí quy trình', 2.12, ''),
-(36363, 'Trần Minh Anh', '2002-08-08', 'Nữ', '0394476389', '7003277202990', 'Cần Thơ', 'main@gmail.com', 'QLLH1', 'Quản lí lô hàng', 2.12, '');
+(34533, 'Dương Hãi Băng Vip', '2002-11-09', 'Nam', '0989839334', '994898834877', '11A, đường 30/4, Xuân Khánh, Ninh Kiều, Cần Thơ', 'bangduong871@gmail.com', 'QLLH2', 'Quản lí lô hàng', 2.12, '');
 
 -- --------------------------------------------------------
 
@@ -160,7 +169,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
 (12345, 'caoquan', '123', 1),
-(32365, 'haibang', '123', 1);
+(24355, 'haibang33', '123', 0),
+(32365, 'haibang', '123', 1),
+(34533, 'B2014729', '123', 0);
 
 --
 -- Indexes for dumped tables

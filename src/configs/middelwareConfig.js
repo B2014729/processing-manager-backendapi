@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import session from 'express-session';
+
 
 const corsOptions = {
     origin: 'http://localhost:8080', // Access-Control-Allow-Origin: http://localhost:8080 Khi chay cung server vaf client tren cung mot may chu
@@ -11,10 +11,8 @@ const corsOptions = {
 
 const middelewareConfig = (app) => {
     app.use(express.static('src/public'));
-
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-
     app.use(cors(corsOptions));
 };
 

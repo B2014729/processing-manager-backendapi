@@ -1,3 +1,6 @@
+import ProcessModel from '../models/processModel.js';
+import MongoDB from '../configs/mongoDB.js';
+
 import * as shipmentModel from '../models/shipmentModel.js';
 // import xlsx from 'xlsx';
 
@@ -74,6 +77,31 @@ const updateShipment = async (req, res) => {
         })
 }
 
+const deleteShipment = async (req, res) => {
+    let id = req.params.id;
+    try {
+        const processModel = new ProcessModel(MongoDB.client);
+        await processModel.deleteAll(id);
+
+        await shipmentModel.deleteShipment(id).then((result) => {
+            if (result) {
+                return res.status(200).json({
+                    statusCode: 200,
+                    message: 'OK',
+                    data: result
+                });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            statusCode: 200,
+            message: 'OK',
+            data: result
+        });
+    }
+}
+
 
 // const exportFileExcel = async (req, res) => {
 //     let data = await shipmentModel.getListShipment();
@@ -105,6 +133,7 @@ export {
     getListShipment,
     getShipment,
     updateShipment,
+    deleteShipment,
     newShipment,
     checkIsset,
     getShipmentByFilter,

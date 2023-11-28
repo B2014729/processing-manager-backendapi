@@ -48,6 +48,11 @@ class ProcessModel {
         }
         return isValid;
     }
+
+    async deleteAll(id) {
+        let result = await this.Process.deleteMany({ id: Number(id) });
+        return result
+    }
 }
 
 export default ProcessModel;
